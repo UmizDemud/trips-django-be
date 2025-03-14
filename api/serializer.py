@@ -133,18 +133,18 @@ class LogbookSerializer(serializers.ModelSerializer):
         return instance
 
 def create_roadmap_for_trip(trip):
-    # 1. Determine total required driving time (in minutes)
+    # Determine total required driving time (in minutes)
     last_location = trip.locations.last()
     total_trip_time_required = (last_location.time if last_location and last_location.time is not None else 0) / 60
 
-    # 2. Build a sorted list of stop locations (for pickups/dropoffs) by their time thresholds
+    # Build a sorted list of stop locations (for pickups/dropoffs) by their time thresholds
     stop_locations = sorted(
         [loc for loc in trip.locations.all() if loc.type in ['pickup', 'dropoff'] and loc.time is not None],
         key=lambda loc: loc.time
     )
     next_stop_idx = 0
 
-    # 3. Define driving limit: 70 hours (4200 minutes) in any 8-day window
+    # Define driving limit: 70 hours (4200 minutes) in any 8-day window
     possible_active_start_offsets = [300, 330, 360, 390, 420, 450, 480, 510, 540, 570, 600]  # minutes from midnight
     allowed_driving_minutes = 70 * 60
     driving_minutes_by_day = {}  # Tracks driving minutes per day
@@ -152,7 +152,7 @@ def create_roadmap_for_trip(trip):
     current_day = 0
     logbooks = []
 
-    # 4. Loop until we've accumulated the required driving minutes
+    # Loop until we've accumulated the required driving minutes
     while cumulative_driving_minutes < total_trip_time_required:
         day_start = trip.start_date + timedelta(days=current_day)
 
@@ -171,7 +171,7 @@ def create_roadmap_for_trip(trip):
 
         skip_next = False
 
-        # 5. Create 48 increments for the day
+        # Create 48 increments for the day
         for inc in range(48):
             # Default: no remark (i.e. remark remains None)
             status = None
