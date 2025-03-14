@@ -26,7 +26,6 @@ class TripSerializer(serializers.ModelSerializer):
             trip.locations.add(location)
 
         # Create Logbook objects (and associated increments) for the trip
-        print("create_roadmap_for_trip called")
         create_roadmap_for_trip(trip)
 
         return trip
@@ -152,6 +151,7 @@ def create_roadmap_for_trip(trip):
     next_stop_idx = 0
 
     # 3. Define driving limit: 70 hours (4200 minutes) in any 8-day window
+    possible_active_start_offsets = [300, 330, 360, 390, 420, 450, 480, 510, 540, 570, 600]  # minutes from midnight
     allowed_driving_minutes = 70 * 60
     driving_minutes_by_day = {}  # Tracks driving minutes per day
     cumulative_driving_minutes = float(trip.cycle_hours * 60)
@@ -162,8 +162,7 @@ def create_roadmap_for_trip(trip):
     while cumulative_driving_minutes < total_trip_time_required:
         day_start = trip.start_date + timedelta(days=current_day)
 
-        # Randomize active start between ~4 AM and ~6 AM
-        possible_active_start_offsets = [300, 330, 360, 390, 420, 450, 480, 510, 540, 570, 600]  # minutes from midnight
+
         active_offset = random.choice(possible_active_start_offsets)
         active_start = day_start + timedelta(minutes=active_offset)
         active_start_index = active_offset // 30  # each increment represents 30 minutes
