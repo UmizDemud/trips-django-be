@@ -133,12 +133,6 @@ class LogbookSerializer(serializers.ModelSerializer):
         return instance
 
 def create_roadmap_for_trip(trip):
-    """
-    Generates a roadmap for a trip by creating Logbook objects (one per day)
-    and 48 Increment objects per Logbook. The Increment objects are created
-    with an appropriate dutyStatus according to simulated rules. The optional
-    'remark' field is left as None (i.e. not created) when not needed.
-    """
     # 1. Determine total required driving time (in minutes)
     last_location = trip.locations.last()
     total_trip_time_required = (last_location.time if last_location and last_location.time is not None else 0) / 60
