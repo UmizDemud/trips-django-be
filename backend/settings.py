@@ -27,7 +27,8 @@ DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
-
+USE_TZ = True  # Ensures Django handles times in UTC
+TIME_ZONE = "UTC"  # Keep storage consistent in UTC
 
 # Application definition
 

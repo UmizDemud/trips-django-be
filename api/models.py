@@ -1,9 +1,6 @@
 from django.db import models
 from django.utils import timezone
 
-# Create your models here.
-
-
 
 class Location(models.Model):
     LOCATION_TYPES = [
