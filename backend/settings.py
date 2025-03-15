@@ -30,6 +30,10 @@ ALLOWED_HOSTS = ['*']
 USE_TZ = True  # Ensures Django handles times in UTC
 TIME_ZONE = "UTC"  # Keep storage consistent in UTC
 
+REST_FRAMEWORK = {
+    "DATETIME_FORMAT": "%Y-%m-%dT%H:%M:%SZ",  # Ensures proper ISO format
+}
+
 # Application definition
 
 INSTALLED_APPS = [
